@@ -1,0 +1,41 @@
+{
+  "name": "@franciscpd/drive-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for Google Drive, Docs, Sheets, and Slides — manage files, documents, spreadsheets, and presentations via AI agents",
+  "type": "module",
+  "bin": { "drive-mcp-server": "dist/index.js" },
+  "main": "dist/index.js",
+  "files": ["dist"],
+  "engines": { "node": ">=22" },
+  "license": "MIT",
+  "author": "franciscpd",
+  "keywords": ["mcp", "google-drive", "google-docs", "google-sheets", "google-slides", "ai", "model-context-protocol"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franciscpd/mcp-server-drive.git"
+  },
+  "bugs": { "url": "https://github.com/franciscpd/mcp-server-drive/issues" },
+  "homepage": "https://github.com/franciscpd/mcp-server-drive#readme",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "async-mutex": "^0.5.0",
+    "google-auth-library": "^10.6.2",
+    "googleapis": "^171.4.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "^4.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}
