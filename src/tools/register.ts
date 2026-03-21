@@ -1,12 +1,34 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { DriveClient } from '../auth/client.js';
+import { registerDriveSearch } from './drive-search.js';
+import { registerDriveList } from './drive-list.js';
+import { registerDriveCreateFolder } from './drive-create-folder.js';
+import { registerDriveUpload } from './drive-upload.js';
+import { registerDriveRead } from './drive-read.js';
+import { registerDriveDelete } from './drive-delete.js';
+import { registerDriveMove } from './drive-move.js';
+import { registerDriveCopy } from './drive-copy.js';
+import { registerDriveRename } from './drive-rename.js';
+import { registerDriveShare } from './drive-share.js';
+import { registerDriveListShared } from './drive-list-shared.js';
 
 export function registerTools(
-  _server: McpServer,
-  _client: DriveClient,
+  server: McpServer,
+  client: DriveClient,
 ): void {
-  // Tools will be registered in future phases:
-  // Phase 2: registerDriveTools(server, client.drive)
+  // Phase 2: Drive tools
+  registerDriveSearch(server, client.drive);
+  registerDriveList(server, client.drive);
+  registerDriveCreateFolder(server, client.drive);
+  registerDriveUpload(server, client.drive);
+  registerDriveRead(server, client.drive);
+  registerDriveDelete(server, client.drive);
+  registerDriveMove(server, client.drive);
+  registerDriveCopy(server, client.drive);
+  registerDriveRename(server, client.drive);
+  registerDriveShare(server, client.drive);
+  registerDriveListShared(server, client.drive);
+
   // Phase 3: registerDocsTools(server, client.docs)
   // Phase 3: registerSheetsTools(server, client.sheets)
   // Phase 4: registerSlidesTools(server, client.slides)
