@@ -145,19 +145,19 @@ Deferred to future release. Tracked but not in current roadmap.
 | DOCS-04 | Phase 3 | Pending |
 | DOCS-05 | Phase 3 | Pending |
 | DOCS-06 | Phase 3 | Pending |
-| SHTS-01 | Phase 4 | Pending |
-| SHTS-02 | Phase 4 | Pending |
-| SHTS-03 | Phase 4 | Pending |
-| SHTS-04 | Phase 4 | Pending |
-| SLDS-01 | Phase 5 | Pending |
-| SLDS-02 | Phase 5 | Pending |
-| SLDS-03 | Phase 5 | Pending |
-| SLDS-04 | Phase 5 | Pending |
-| PACK-01 | Phase 6 | Pending |
-| PACK-02 | Phase 6 | Pending |
-| PACK-03 | Phase 6 | Pending |
-| PACK-04 | Phase 6 | Pending |
-| PACK-05 | Phase 6 | Pending |
+| SHTS-01 | Phase 3 | Pending |
+| SHTS-02 | Phase 3 | Pending |
+| SHTS-03 | Phase 3 | Pending |
+| SHTS-04 | Phase 3 | Pending |
+| SLDS-01 | Phase 4 | Pending |
+| SLDS-02 | Phase 4 | Pending |
+| SLDS-03 | Phase 4 | Pending |
+| SLDS-04 | Phase 4 | Pending |
+| PACK-01 | Phase 5 | Pending |
+| PACK-02 | Phase 5 | Pending |
+| PACK-03 | Phase 5 | Pending |
+| PACK-04 | Phase 5 | Pending |
+| PACK-05 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 36 total
@@ -166,4 +166,4 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-20 after initial definition*
+*Last updated: 2026-03-20 after roadmap creation (coarse granularity: Docs+Sheets merged into Phase 3, Slides Phase 4, Package Phase 5)*
