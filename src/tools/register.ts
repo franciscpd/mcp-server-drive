@@ -11,6 +11,8 @@ import { registerDriveCopy } from './drive-copy.js';
 import { registerDriveRename } from './drive-rename.js';
 import { registerDriveShare } from './drive-share.js';
 import { registerDriveListShared } from './drive-list-shared.js';
+import { registerDocsTools } from './docs-register.js';
+import { registerSheetsTools } from './sheets-register.js';
 
 export function registerTools(
   server: McpServer,
@@ -29,7 +31,9 @@ export function registerTools(
   registerDriveShare(server, client.drive);
   registerDriveListShared(server, client.drive);
 
-  // Phase 3: registerDocsTools(server, client.docs)
-  // Phase 3: registerSheetsTools(server, client.sheets)
+  // Phase 3: Docs + Sheets tools
+  registerDocsTools(server, client);
+  registerSheetsTools(server, client.sheets);
+
   // Phase 4: registerSlidesTools(server, client.slides)
 }
