@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import type { drive_v3 } from 'googleapis';
+import type { docs_v1, drive_v3, sheets_v4 } from 'googleapis';
 
 export function createMockFile(overrides?: Partial<drive_v3.Schema$File>): drive_v3.Schema$File {
   return {
@@ -21,6 +21,8 @@ export function createMockDrive(overrides?: Partial<{
   filesExport: ReturnType<typeof vi.fn>;
   permissionsCreate: ReturnType<typeof vi.fn>;
   drivesList: ReturnType<typeof vi.fn>;
+  commentsList: ReturnType<typeof vi.fn>;
+  commentsCreate: ReturnType<typeof vi.fn>;
 }>) {
   return {
     files: {
@@ -42,12 +44,75 @@ export function createMockDrive(overrides?: Partial<{
         data: { drives: [{ id: 'drive-1', name: 'Shared Drive', createdTime: '2026-01-01T00:00:00Z' }], nextPageToken: null },
       }),
     },
+    comments: {
+      list: overrides?.commentsList ?? vi.fn().mockResolvedValue({ data: { comments: [] } }),
+      create: overrides?.commentsCreate ?? vi.fn().mockResolvedValue({
+        data: { id: 'comment-1', author: { displayName: 'User', emailAddress: 'user@example.com' }, content: 'Test comment', createdTime: '2026-03-21T00:00:00Z' },
+      }),
+    },
   } as unknown as drive_v3.Drive;
 }
 
+export function createMockDocs(overrides?: Partial<{
+  documentsCreate: ReturnType<typeof vi.fn>;
+  documentsGet: ReturnType<typeof vi.fn>;
+  documentsBatchUpdate: ReturnType<typeof vi.fn>;
+}>) {
+  return {
+    documents: {
+      create: overrides?.documentsCreate ?? vi.fn().mockResolvedValue({
+        data: { documentId: 'doc-1', title: 'Test Doc' },
+      }),
+      get: overrides?.documentsGet ?? vi.fn().mockResolvedValue({
+        data: {
+          documentId: 'doc-1', title: 'Test Doc',
+          body: { content: [
+            { endIndex: 1 },
+            { startIndex: 1, endIndex: 13, paragraph: { elements: [{ startIndex: 1, endIndex: 13, textRun: { content: 'Hello world\n' } }] } },
+          ] },
+        },
+      }),
+      batchUpdate: overrides?.documentsBatchUpdate ?? vi.fn().mockResolvedValue({ data: { documentId: 'doc-1', replies: [] } }),
+    },
+  } as unknown as docs_v1.Docs;
+}
+
+export function createMockSheets(overrides?: Partial<{
+  spreadsheetsCreate: ReturnType<typeof vi.fn>;
+  spreadsheetsGet: ReturnType<typeof vi.fn>;
+  valuesGet: ReturnType<typeof vi.fn>;
+  valuesUpdate: ReturnType<typeof vi.fn>;
+}>) {
+  return {
+    spreadsheets: {
+      create: overrides?.spreadsheetsCreate ?? vi.fn().mockResolvedValue({
+        data: {
+          spreadsheetId: 'sheet-1', properties: { title: 'Test Sheet' },
+          spreadsheetUrl: 'https://docs.google.com/spreadsheets/d/sheet-1/edit',
+          sheets: [{ properties: { sheetId: 0, title: 'Sheet1', index: 0, gridProperties: { rowCount: 1000, columnCount: 26 } } }],
+        },
+      }),
+      get: overrides?.spreadsheetsGet ?? vi.fn().mockResolvedValue({
+        data: {
+          spreadsheetId: 'sheet-1', properties: { title: 'Test Sheet' },
+          sheets: [{ properties: { sheetId: 0, title: 'Sheet1', index: 0, gridProperties: { rowCount: 1000, columnCount: 26 } } }],
+        },
+      }),
+      values: {
+        get: overrides?.valuesGet ?? vi.fn().mockResolvedValue({
+          data: { range: 'Sheet1!A1:B2', values: [['Name', 'Age'], ['Alice', '30']] },
+        }),
+        update: overrides?.valuesUpdate ?? vi.fn().mockResolvedValue({
+          data: { updatedRange: 'Sheet1!A1:B2', updatedRows: 2, updatedColumns: 2, updatedCells: 4 },
+        }),
+      },
+    },
+  } as unknown as sheets_v4.Sheets;
+}
+
 export function captureToolHandler(
-  registerFn: (server: any, drive: drive_v3.Drive) => void,
-  drive: drive_v3.Drive,
+  registerFn: (server: any, ...args: any[]) => void,
+  ...args: any[]
 ): (params: any) => Promise<any> {
   let capturedHandler: ((params: any) => Promise<any>) | null = null;
   const mockServer = {
@@ -55,7 +120,7 @@ export function captureToolHandler(
       capturedHandler = handler;
     },
   };
-  registerFn(mockServer as any, drive);
+  registerFn(mockServer as any, ...args);
   if (!capturedHandler) throw new Error('Handler not captured');
   return capturedHandler;
 }
