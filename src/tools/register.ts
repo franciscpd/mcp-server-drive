@@ -13,6 +13,7 @@ import { registerDriveShare } from './drive-share.js';
 import { registerDriveListShared } from './drive-list-shared.js';
 import { registerDocsTools } from './docs-register.js';
 import { registerSheetsTools } from './sheets-register.js';
+import { registerSlidesTools } from './slides-register.js';
 
 export function registerTools(
   server: McpServer,
@@ -35,5 +36,6 @@ export function registerTools(
   registerDocsTools(server, client);
   registerSheetsTools(server, client.sheets);
 
-  // Phase 4: registerSlidesTools(server, client.slides)
+  // Phase 4: Slides tools
+  registerSlidesTools(server, client.slides);
 }
