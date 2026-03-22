@@ -20,9 +20,10 @@ export function registerSheetsCreate(server: McpServer, sheets: sheets_v4.Sheets
         const spreadsheetId = response.data.spreadsheetId!;
 
         if (params.data) {
+          const firstSheetTitle = response.data.sheets?.[0]?.properties?.title ?? 'Sheet1';
           await sheets.spreadsheets.values.update({
             spreadsheetId,
-            range: 'Sheet1',
+            range: firstSheetTitle,
             valueInputOption: 'RAW',
             requestBody: { values: params.data },
           });
