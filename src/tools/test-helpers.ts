@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import type { docs_v1, drive_v3, sheets_v4 } from 'googleapis';
+import type { docs_v1, drive_v3, sheets_v4, slides_v1 } from 'googleapis';
 
 export function createMockFile(overrides?: Partial<drive_v3.Schema$File>): drive_v3.Schema$File {
   return {
@@ -108,6 +108,35 @@ export function createMockSheets(overrides?: Partial<{
       },
     },
   } as unknown as sheets_v4.Sheets;
+}
+
+export function createMockSlides(overrides?: Partial<{
+  presentationsCreate: ReturnType<typeof vi.fn>;
+  presentationsGet: ReturnType<typeof vi.fn>;
+  presentationsBatchUpdate: ReturnType<typeof vi.fn>;
+}>) {
+  return {
+    presentations: {
+      create: overrides?.presentationsCreate ?? vi.fn().mockResolvedValue({
+        data: { presentationId: 'pres-1', title: 'Test Presentation' },
+      }),
+      get: overrides?.presentationsGet ?? vi.fn().mockResolvedValue({
+        data: {
+          presentationId: 'pres-1', title: 'Test Presentation',
+          slides: [{
+            objectId: 'slide-1',
+            pageElements: [{
+              objectId: 'shape-1',
+              shape: { shapeType: 'TEXT_BOX', text: { textElements: [{ textRun: { content: 'Hello slide' } }] } },
+            }],
+          }],
+        },
+      }),
+      batchUpdate: overrides?.presentationsBatchUpdate ?? vi.fn().mockResolvedValue({
+        data: { presentationId: 'pres-1', replies: [{ createSlide: { objectId: 'new-slide-1' } }] },
+      }),
+    },
+  } as unknown as slides_v1.Slides;
 }
 
 export function captureToolHandler(
