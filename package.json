@@ -1,6 +1,6 @@
 {
   "name": "@franciscpd/drive-mcp-server",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MCP server for Google Drive, Docs, Sheets, and Slides — manage files, documents, spreadsheets, and presentations via AI agents",
   "type": "module",
   "bin": {
