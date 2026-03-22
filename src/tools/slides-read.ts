@@ -20,15 +20,19 @@ export function registerSlidesRead(server: McpServer, slides: slides_v1.Slides):
         const extractedSlides = (presentation.slides ?? []).map((slide) => ({
           objectId: slide.objectId,
           pageElements: (slide.pageElements ?? [])
-            .filter((el) => el.shape?.text)
-            .map((el) => ({
-              objectId: el.objectId,
-              shapeType: el.shape!.shapeType,
-              text: (el.shape!.text!.textElements ?? [])
+            .filter((el) => el.shape)
+            .map((el) => {
+              const text = (el.shape!.text?.textElements ?? [])
                 .map((te) => te.textRun?.content ?? '')
                 .join('')
-                .trimEnd(),
-            })),
+                .trimEnd();
+              return {
+                objectId: el.objectId,
+                shapeType: el.shape!.shapeType,
+                placeholderType: el.shape!.placeholder?.type ?? null,
+                text,
+              };
+            }),
         }));
 
         return {

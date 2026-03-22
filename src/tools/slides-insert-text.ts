@@ -14,26 +14,27 @@ export function registerSlidesInsertText(server: McpServer, slides: slides_v1.Sl
     },
     (params) =>
       safeToolHandler(async () => {
-        await slides.presentations.batchUpdate({
-          presentationId: params.presentation_id,
-          requestBody: {
-            requests: [
-              {
-                deleteText: {
-                  objectId: params.object_id,
-                  textRange: { type: 'ALL' },
-                },
-              },
-              {
-                insertText: {
-                  objectId: params.object_id,
-                  text: params.text,
-                  insertionIndex: 0,
-                },
-              },
-            ],
-          },
-        });
+        try {
+          await slides.presentations.batchUpdate({
+            presentationId: params.presentation_id,
+            requestBody: {
+              requests: [
+                { deleteText: { objectId: params.object_id, textRange: { type: 'ALL' } } },
+                { insertText: { objectId: params.object_id, text: params.text, insertionIndex: 0 } },
+              ],
+            },
+          });
+        } catch {
+          // deleteText fails on empty shapes — retry with just insertText
+          await slides.presentations.batchUpdate({
+            presentationId: params.presentation_id,
+            requestBody: {
+              requests: [
+                { insertText: { objectId: params.object_id, text: params.text, insertionIndex: 0 } },
+              ],
+            },
+          });
+        }
 
         return {
           content: [
